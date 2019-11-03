@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/gsodsync
+gsodsync.so
+gsodsync.dylib
+gsodsync.dll
+gsodsync.a
+gsodsync.lib
+gsodsync-test-*
+*.exe
+*.o
+*.obj
+*.lst

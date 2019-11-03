@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Reece Jones"
+	],
+	"copyright": "Copyright © 2019, Reece Jones",
+	"description": "NOAA GSOD data downloader and syncer.",
+	"license": "proprietary",
+	"name": "gsodsync"
+}
