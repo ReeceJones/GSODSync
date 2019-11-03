@@ -17,7 +17,7 @@ void main()
 	// start all threads
 	for (int i = 0; i < scraper.config.syncThreads; i++)
 	{
-		scraperThreads[i] = new ScraperThread(queue);
+		scraperThreads[i] = new ScraperThread(queue, i);
 		writefln!"Starting thread %d"(i + 1);
 		scraperThreads[i].start();
 	}

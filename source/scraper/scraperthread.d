@@ -15,13 +15,15 @@ import std.stdio: writeln;
 class ScraperThread : Thread
 {
 public:
-    this(ThreadPoolTaskQueue queue)
+    this(ThreadPoolTaskQueue queue, int i)
     {
         this.queue = queue;
+        this.threadId = i;
         super(&run);
     }
 private:
     ThreadPoolTaskQueue queue;
+    int threadId;
 
     void run()
     {
@@ -30,8 +32,11 @@ private:
         {
             // construct the root
             string root = gsodDirectoryLocation ~ year ~ "/";
-            writeln("root: ", root);
-
+            // move to correct position
+            writef!"\x1b[s";
+            writef!"\x1b[%d;0H";
+            writef!"Thread %d\t: %s"(this.threadId, root);
+            writef!"\x1b[u";
             // create a directory to place files in 
             auto tree = buildPath("gsod", year /* remove trailing '/' */);
             tree.mkdirRecurse;

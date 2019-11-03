@@ -13,3 +13,4 @@ gsodsync-test-*
 *.o
 *.obj
 *.lst
+gsod/

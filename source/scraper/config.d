@@ -9,7 +9,7 @@ immutable string gsodDirectoryLocation = "https://www.ncei.noaa.gov/data/global-
 /**
  * Number of threads running at once, downloading data from NOAA GSOD records.
  */
-immutable int syncThreads = 4;
+immutable int syncThreads = 16;
 
 /** 
  * The start year that we want to download records from
