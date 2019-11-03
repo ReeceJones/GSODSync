@@ -7,7 +7,7 @@ import core.thread;
 import std.net.curl: get, download;
 import std.path: buildPath;
 import std.file: mkdirRecurse;
-import std.stdio: writeln;
+import std.stdio: writeln, writef;
 
 /**
  * Thread class that is used to download CSV files.
@@ -33,10 +33,6 @@ private:
             // construct the root
             string root = gsodDirectoryLocation ~ year ~ "/";
             // move to correct position
-            writef!"\x1b[s";
-            writef!"\x1b[%d;0H";
-            writef!"Thread %d\t: %s"(this.threadId, root);
-            writef!"\x1b[u";
             // create a directory to place files in 
             auto tree = buildPath("gsod", year /* remove trailing '/' */);
             tree.mkdirRecurse;
@@ -49,6 +45,10 @@ private:
             {
                 foreach (string csvResource; csvre)
                 {
+                    // save the cursor pos, set the line row, move to begginning of line, clear line, write the line, restore cursor pos
+                    writef!"\x1b[s\x1b[%dA\x1b[100D\x1b[2K\x1b[32mThread %d\x1b[0m\t: %s\x1b[31m%s\x1b[0m\x1b[u"(
+                        syncThreads - this.threadId, this.threadId + 1, root, csvResource); 
+
                     // download the resource
                     download(root ~ csvResource, buildPath("gsod", year) ~ "/" ~ csvResource);
                 }
