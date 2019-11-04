@@ -7,7 +7,7 @@ import core.thread;
 import std.net.curl: get, download;
 import std.path: buildPath;
 import std.file: mkdirRecurse;
-import std.stdio: writeln, writef;
+import std.stdio: writeln, writef, writefln;
 
 /**
  * Thread class that is used to download CSV files.
@@ -34,7 +34,7 @@ private:
             string root = gsodDirectoryLocation ~ year ~ "/";
             // move to correct position
             // create a directory to place files in 
-            auto tree = buildPath("gsod", year /* remove trailing '/' */);
+            auto tree = buildPath("gsod", year);
             tree.mkdirRecurse;
 
             // download the root directory for this given year
@@ -45,12 +45,25 @@ private:
             {
                 foreach (string csvResource; csvre)
                 {
-                    // save the cursor pos, set the line row, move to begginning of line, clear line, write the line, restore cursor pos
-                    writef!"\x1b[s\x1b[%dA\x1b[100D\x1b[2K\x1b[32mThread %d\x1b[0m\t: %s\x1b[31m%s\x1b[0m\x1b[u"(
-                        syncThreads - this.threadId, this.threadId + 1, root, csvResource); 
-
-                    // download the resource
-                    download(root ~ csvResource, buildPath("gsod", year) ~ "/" ~ csvResource);
+                    if (useFancyFormatting)
+                    {
+                        // save the cursor pos, set the line row, move to begginning of line, clear line, write the line, restore cursor pos
+                        writef!"\x1b[s\x1b[%dA\x1b[100D\x1b[2K\x1b[32mThread %d\x1b[0m\t: %s\x1b[31m%s\x1b[0m\x1b[u"(
+                            syncThreads - this.threadId, this.threadId + 1, root, csvResource); 
+                    }
+                    else
+                    {
+                        writefln!"Thread %d\t: %s%s"(this.threadId + 1, root, csvResource);
+                    }
+                    try 
+                    {
+                        // download the resource
+                        download(root ~ csvResource, buildPath("gsod", year) ~ "/" ~ csvResource);
+                    }
+                    catch (Exception ex)
+                    {
+                        // do nothing :(
+                    }
                 }
             }
             catch (Exception ex)

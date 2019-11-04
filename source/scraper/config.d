@@ -14,9 +14,14 @@ immutable int syncThreads = 16;
 /** 
  * The start year that we want to download records from
  */
-shared immutable int beginningYear = 1901;
+immutable int beginningYear = 1901;
 
 /**
  * The end year we want to download records from. -1 for current year of host machine.
  */
-shared immutable int endYear = -1;
+immutable int endYear = -1;
+
+/**
+ * Use fancy formatting on thread status.
+ */
+immutable bool useFancyFormatting = false;
