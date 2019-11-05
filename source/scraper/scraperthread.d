@@ -6,7 +6,7 @@ import scraper.csvextractor;
 import core.thread;
 import std.net.curl: get, download;
 import std.path: buildPath;
-import std.file: mkdirRecurse;
+import std.file: mkdirRecurse, exists;
 import std.stdio: writeln, writef, writefln;
 
 /**
@@ -45,6 +45,9 @@ private:
             {
                 foreach (string csvResource; csvre)
                 {
+                    string path = buildPath("gsod", year) ~ "/" ~ csvResource;
+                    if (path.exists)
+                        continue;
                     if (useFancyFormatting)
                     {
                         // save the cursor pos, set the line row, move to begginning of line, clear line, write the line, restore cursor pos
@@ -58,7 +61,7 @@ private:
                     try 
                     {
                         // download the resource
-                        download(root ~ csvResource, buildPath("gsod", year) ~ "/" ~ csvResource);
+                        download(root ~ csvResource, path);
                     }
                     catch (Exception ex)
                     {
